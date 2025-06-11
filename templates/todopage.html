@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Task | Todo App</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
+      color: #fff;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      padding: 15px 30px 0 0;
+    }
+
+    .logout-link {
+      text-decoration: none;
+      color: #00ffe5;
+      font-size: 16px;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .logout-link:hover {
+      color: #00b3ff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #111;
+      border: 2px solid #00ffe5;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 15px #00ffe5;
+    }
+
+    h2 {
+      text-align: center;
+      color: #00ffe5;
+      margin-bottom: 30px;
+      font-size: 26px;
+    }
+
+    form {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 40px;
+      justify-content: center;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      width: 60%;
+      background: #222;
+      color: white;
+      border: 1px solid #444;
+      font-size: 15px;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #00ffe5;
+      box-shadow: 0 0 5px #00ffe5;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, #00ffe5, #00b3ff);
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .task-list {
+      margin-top: 20px;
+    }
+
+    .task-item {
+      background: #1a1a2e;
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      border-left: 4px solid #00ffe5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.3s ease;
+    }
+
+    .task-item:hover {
+      background-color: #232341;
+    }
+
+    .task-title {
+      font-size: 16px;
+    }
+
+    .actions a {
+      margin-left: 12px;
+      color: #00ffe5;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .actions a:hover {
+      color: #00b3ff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logout link at top-right -->
+  <div class="top-bar">
+    <a href="/signout" class="logout-link" title="Logout">🔓 Logout</a>
+  </div>
+
+  <div class="container">
+   {% if user.is_authenticated %}
+  <h2>🚀 Add a New Mission, {{ user.username }}</h2>
+{% else %}
+  <h2>🚀 Please log in to add a mission</h2>
+{% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+      <input type="text" name="title" placeholder="Enter your task..." required>
+      <button type="submit" class="btn">➕ Add</button>
+    </form>
+
+    <div class="task-list">
+      {% for task in res %}
+      <div class="task-item">
+        <div class="task-title">{{ task.id }}</div>
+        <div class="task-title">{{ task.title }}</div>
+        <div class="actions">
+          <a href="/edit_todo/{{task.id}}" title="Edit">&#9998;</a>
+          <a href="/delete_todo/{{task.id}}" title="Delete">&#128465;</a>
+        </div>
+      </div>
+      {% empty %}
+      <p style="text-align:center; color: #999;">No tasks added yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+</body>
+</html>
